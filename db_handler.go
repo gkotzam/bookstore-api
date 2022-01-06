@@ -36,7 +36,7 @@ func db_get_books() (books []Book) {
 	var book Book
 
 	for result.Next() {
-		err = result.Scan(&book.ID, &book.Isbn, &book.Title, &book.Author)
+		err = result.Scan(&book.ID, &book.Title, &book.Isbn10, &book.Isbn13, &book.Author, &book.Publisher, &book.Pub_year, &book.Language, &book.Pages, &book.Decription, &book.Price)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -63,7 +63,7 @@ func db_get_book(num int) (book Book) {
 	defer result.Close()
 
 	if result.Next() {
-		err = result.Scan(&book.ID, &book.Isbn, &book.Title, &book.Author)
+		err = result.Scan(&book.ID, &book.Title, &book.Isbn10, &book.Isbn13, &book.Author, &book.Publisher, &book.Pub_year, &book.Language, &book.Pages, &book.Decription, &book.Price)
 		if err != nil {
 			panic(err.Error())
 		}

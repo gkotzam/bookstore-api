@@ -13,10 +13,17 @@ import (
 
 // Book Struck Model
 type Book struct {
-	ID     string "json:\"id\""
-	Isbn   string "json:\"isbn\""
-	Title  string "json:\"title\""
-	Author string "json:\"author\""
+	ID         string "json:\"id\""
+	Title      string "json:\"title\""
+	Isbn10     string "json:\"isbn10\""
+	Isbn13     string "json:\"isbn13\""
+	Author     string "json:\"author\""
+	Publisher  string "json:\"publisher\""
+	Pub_year   string "json:\"pub_year\""
+	Language   string "json:\"language\""
+	Pages      string "json:\"pages\""
+	Decription string "json:\"description\""
+	Price      string "json:\"price\""
 }
 
 // Get All Books
