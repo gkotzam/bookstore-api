@@ -31,7 +31,6 @@ type Author struct {
 	ID      string "json:\"author_id\""
 	Name    string "json:\"name\""
 	Country string "json:\"country\""
-	//Written_books string "json:\"written_books\""
 }
 
 // BOOKS
