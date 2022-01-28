@@ -137,6 +137,32 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "homepage Endpoint Hit")
 }
 
+// SEARCH
+
+// Search Books by Title
+func searchBooksByTitle(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	books := db_search_books_by_title(params["title"])
+	json.NewEncoder(w).Encode(books)
+}
+
+// Search Books by Publisher
+func searchBooksByPublisher(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	books := db_search_books_by_publisher(params["title"])
+	json.NewEncoder(w).Encode(books)
+}
+
+// Search Books by Author
+func searchBooksByAuthor(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	books := db_search_books_by_author(params["author"])
+	json.NewEncoder(w).Encode(books)
+}
+
 func main() {
 
 	// Init Router
@@ -157,6 +183,10 @@ func main() {
 	router.HandleFunc("/api/authors", createAuthor).Methods("POST")
 	router.HandleFunc("/api/authors/{id}", updateAuthor).Methods("PATCH")
 	router.HandleFunc("/api/authors/{id}", deleteAuthor).Methods("DELETE")
+	// SEARCH
+	router.HandleFunc("/api/search/books-by-title/{title}", searchBooksByTitle).Methods("GET")
+	router.HandleFunc("/api/search/books-by-publisher/{publisher}", searchBooksByPublisher).Methods("GET")
+	router.HandleFunc("/api/search/books-by-author/{author}", searchBooksByAuthor).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 

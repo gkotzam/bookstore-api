@@ -487,3 +487,52 @@ func db_delete_author(num int) {
 		defer result5.Close()
 	}
 }
+
+// Returns books with (@param: title) in their title
+func db_search_books_by_title(title string) (books []Book) {
+
+	all_books := db_get_books()
+
+	for _, book := range all_books {
+		if strings.Contains(strings.ToLower(book.Title), strings.ToLower(title)) {
+			books = append(books, book)
+		}
+	}
+
+	return books
+
+}
+
+// Returns books with (@param: publisher) in their publisher
+func db_search_books_by_publisher(publisher string) (books []Book) {
+
+	all_books := db_get_books()
+
+	for _, book := range all_books {
+		if strings.Contains(strings.ToLower(book.Publisher), strings.ToLower(publisher)) {
+			books = append(books, book)
+		}
+	}
+
+	return books
+
+}
+
+// Returns books with (@param: author) in their Authors
+func db_search_books_by_author(author string) (books []Book) {
+
+	all_books := db_get_books()
+
+	for _, book := range all_books {
+
+		for _, author2 := range book.Authors {
+			if strings.Contains(strings.ToLower(author2.Name), strings.ToLower(author)) {
+				books = append(books, book)
+				break
+			}
+		}
+	}
+
+	return books
+
+}
