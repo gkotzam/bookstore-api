@@ -214,6 +214,7 @@ func db_update_book(num int, book Book) {
 	old_book := db_get_book(num)
 
 	var author_ids string
+	var sql_query string = "UPDATE books SET "
 
 	if len(book.Authors) == 0 {
 		// keep old book info
@@ -226,46 +227,38 @@ func db_update_book(num int, book Book) {
 		}
 		author_ids = db_authors_to_id_string(book.Authors)
 	}
-
 	// Keep old book info or update
 
-	if book.Title == "" {
-		book.Title = old_book.Title
-	} else { // add slashes
-		book.Title = strings.ReplaceAll(book.Title, "'", "\\'")
+	if book.Title != "" {
+		sql_query += fmt.Sprintf(" title ='%s', ", book.Title)
 	}
-	if book.Isbn10 == "" {
-		book.Isbn10 = old_book.Isbn10
+	if book.Isbn10 != "" {
+		sql_query += fmt.Sprintf(" isbn10 ='%s', ", book.Isbn10)
 	}
-	if book.Isbn13 == "" {
-		book.Isbn13 = old_book.Isbn13
+	if book.Isbn13 != "" {
+		sql_query += fmt.Sprintf(" isbn13 ='%s', ", book.Isbn13)
 	}
-	if book.Publisher == "" {
-		book.Publisher = old_book.Publisher
-	} else { // add slashes
-		book.Publisher = strings.ReplaceAll(book.Publisher, "'", "\\'")
+	if book.Publisher != "" {
+		sql_query += fmt.Sprintf(" publisher ='%s', ", book.Publisher)
 	}
-	if book.Pub_year == "" {
-		book.Pub_year = old_book.Pub_year
+	if book.Pub_year != "" {
+		sql_query += fmt.Sprintf(" pub_year ='%s', ", book.Pub_year)
 	}
-	if book.Language == "" {
-		book.Language = old_book.Language
-	} else { // add slashes
-		book.Language = strings.ReplaceAll(book.Language, "'", "\\'")
+	if book.Language != "" {
+		sql_query += fmt.Sprintf(" language ='%s', ", book.Language)
 	}
-	if book.Pages == "" {
-		book.Pages = old_book.Pages
+	if book.Pages != "" {
+		sql_query += fmt.Sprintf(" pages ='%s', ", book.Pages)
 	}
-	if book.Decription == "" {
-		book.Decription = old_book.Decription
-	} else { // add slashes
-		book.Decription = strings.ReplaceAll(book.Decription, "'", "\\'")
+	if book.Decription != "" {
+		sql_query += fmt.Sprintf(" description ='%s', ", book.Decription)
 	}
-	if book.Price == "" {
-		book.Price = old_book.Price
+	if book.Price != "" {
+		sql_query += fmt.Sprintf(" price ='%s', ", book.Price)
 	}
+	sql_query += fmt.Sprintf(" author ='%s' WHERE id=%d ; ", author_ids, num)
 
-	sql_query := fmt.Sprintf("UPDATE books SET title ='%s',  isbn10 ='%s',  isbn13 ='%s',  author ='%s',  publisher ='%s',  pub_year ='%s',  language ='%s',  pages ='%s',  description ='%s',  price ='%s' WHERE id=%d;", book.Title, book.Isbn10, book.Isbn13, author_ids, book.Publisher, book.Pub_year, book.Language, book.Pages, book.Decription, book.Price, num)
+	//sql_query := fmt.Sprintf("UPDATE books SET title ='%s',  isbn10 ='%s',  isbn13 ='%s',  author ='%s',  publisher ='%s',  pub_year ='%s',  language ='%s',  pages ='%s',  description ='%s',  price ='%s' WHERE id=%d;", book.Title, book.Isbn10, book.Isbn13, author_ids, book.Publisher, book.Pub_year, book.Language, book.Pages, book.Decription, book.Price, num)
 
 	result, err := db.Query(sql_query)
 
