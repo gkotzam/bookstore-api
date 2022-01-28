@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"strconv"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -295,50 +294,6 @@ func db_delete_book(num int) {
 
 	defer result2.Close()
 
-	var book Book
-	var temp string
-	for result2.Next() {
-		// reset id for every book after the deleted book
-		err = result2.Scan(&book.ID, &book.Title, &book.Isbn10, &book.Isbn13, &temp, &book.Publisher, &book.Pub_year, &book.Language, &book.Pages, &book.Decription, &book.Price)
-		if err != nil {
-			panic(err.Error())
-		}
-		id, err := strconv.Atoi(book.ID)
-		if err != nil {
-			panic(err.Error())
-		}
-		var newId int = id - 1
-		// set id-1
-		sql_query = fmt.Sprintf("UPDATE books SET id = %d WHERE id=%d;", newId, id)
-		result3, err := db.Query(sql_query)
-		if err != nil {
-			panic(err.Error())
-		}
-		result3.Close()
-
-	}
-
-	// reset auto_increment
-	sql_query = "SELECT COUNT(1) from books;"
-	result4, err := db.Query(sql_query)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer result4.Close()
-	if result4.Next() {
-		var total int
-		err = result4.Scan(&total)
-		if err != nil {
-			panic(err.Error())
-		}
-		sql_query = fmt.Sprintf("ALTER TABLE books AUTO_INCREMENT = %d;", total)
-		result5, err := db.Query(sql_query)
-		if err != nil {
-			panic(err.Error())
-		}
-		defer result5.Close()
-	}
-
 }
 
 // Returns all authors stored in database
@@ -433,59 +388,6 @@ func db_delete_author(num int) {
 	}
 	defer result.Close()
 
-	// get all books after the deleted book
-	sql_query = fmt.Sprintf("SELECT * from authors WHERE id >%d;", num)
-
-	result2, err := db.Query(sql_query)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	defer result2.Close()
-
-	for result2.Next() {
-		var author Author
-		// reset id for every author after the deleted author
-		err = result2.Scan(&author.ID, &author.Name, &author.Country)
-		if err != nil {
-			panic(err.Error())
-		}
-		id, err := strconv.Atoi(author.ID)
-		if err != nil {
-			panic(err.Error())
-		}
-		var newId int = id - 1
-		// set id-1
-		sql_query = fmt.Sprintf("UPDATE authors SET id = %d WHERE id=%d;", newId, id)
-		result3, err := db.Query(sql_query)
-		if err != nil {
-			panic(err.Error())
-		}
-		result3.Close()
-
-	}
-
-	// reset auto_increment
-	sql_query = "SELECT COUNT(1) from authors;"
-	result4, err := db.Query(sql_query)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer result4.Close()
-	if result4.Next() {
-		var total int
-		err = result4.Scan(&total)
-		if err != nil {
-			panic(err.Error())
-		}
-		sql_query = fmt.Sprintf("ALTER TABLE authors AUTO_INCREMENT = %d;", total)
-		result5, err := db.Query(sql_query)
-		if err != nil {
-			panic(err.Error())
-		}
-		defer result5.Close()
-	}
 }
 
 // Returns books with (@param: title) in their title
