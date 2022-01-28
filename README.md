@@ -2,7 +2,7 @@
 
 
 
-## Usage
+# Usage
 
 # Get all Books
 ```
