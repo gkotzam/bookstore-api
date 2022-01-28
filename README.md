@@ -4,9 +4,9 @@
 
 # Usage
 
-# Get all Books
+## Get all Books
 ```
 [GET] /api/books
 ```
 
-# Get a Book by {id}
+## Get a Book by {id}
